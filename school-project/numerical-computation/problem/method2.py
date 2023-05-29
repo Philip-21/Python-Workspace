@@ -3,9 +3,6 @@ import time
 def bisection(f, a, b, tol=1e-6, max_iter=100):
     start_time = time.time()
     
-    if f(a) * f(b) >= 0:
-        raise ValueError("Function has the same sign at endpoints.")
-    
     iter_count = 0
     while (b - a) / 2 > tol and iter_count < max_iter:
         c = (a + b) / 2
@@ -97,9 +94,14 @@ def euler_method(f, x0, y0, h, n):
     return y, comp_time
 
 # Example functions for demonstration
-def example_function(x):
-    equation = input("Enter Equation :")
-    return eval(equation)
+
+# the root equation function for Bisection, Newton Raphson, Secant Method
+def example_root_equation(x):
+    return x**2 - 3
+
+# the derivative for the rot equation which will be utilised for newton Rapshon 
+def example_root_equation_derivative(x):
+    return 2*x
 
 def example_function_derivative(x):
     return 3*x**2 - 5
@@ -122,20 +124,29 @@ if choice == 1:
     if method == 1:
         a = float(input("Enter the value of 'a': "))
         b = float(input("Enter the value of 'b': "))
-        root, comp_time = bisection(example_function, a, b)
-        print("Root:", root)
-        print("Computation Time:", comp_time, "seconds")
+        try:
+            root, comp_time = bisection(example_root_equation, a, b)
+            print("Root:", root)
+            print("Computation Time:", comp_time, "seconds")
+        except ValueError as e:
+            print(e)
     elif method == 2:
         x0 = float(input("Enter the initial guess 'x0': "))
-        root, comp_time = newton_raphson(example_function, example_function_derivative, x0)
-        print("Root:", root)
-        print("Computation Time:", comp_time, "seconds")
+        try:
+            root, comp_time = newton_raphson(example_root_equation,example_root_equation_derivative, x0)
+            print("Root:", root)
+            print("Computation Time:", comp_time, "seconds")
+        except ValueError as e:
+            print(e)
     elif method == 3:
         x0 = float(input("Enter the first initial guess 'x0': "))
         x1 = float(input("Enter the second initial guess 'x1': "))
-        root, comp_time = secant_method(example_function, x0, x1)
-        print("Root:", root)
-        print("Computation Time:", comp_time, "seconds")
+        try:
+            root, comp_time = secant_method(example_root_equation, x0, x1)
+            print("Root:", root)
+            print("Computation Time:", comp_time, "seconds")
+        except ValueError as e:
+            print(e)
     else:
         print("Invalid method choice.")
 elif choice == 2:
